@@ -137,7 +137,7 @@ class PrinterSerialBridge:
             msg + self.serial_bridge.perform_replacement(self.eol), 40)
         for chunk in chunks:
             byte_debug = ' '.join(['0x{:02x}'.format(byte) for byte in chunk])
-            self.log("Sending message: " + byte_debug)
+            # self.log("Sending message: " + byte_debug)
             self.serial_bridge_send_cmd.send([self.oid, chunk, 4])
 
     def build_config(self):

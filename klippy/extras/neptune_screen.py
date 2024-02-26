@@ -66,40 +66,40 @@ class SerialHostScreen:
 
     def _screen_update(self, eventtime):
    
-        stats = self.printer.lookup_object(
-            "print_stats").get_status(self.reactor.monotonic())
+        # stats = self.printer.lookup_object(
+        #     "print_stats").get_status(self.reactor.monotonic())
 
-        for heater in self.heaters:
-            current_temp, target_temp = heater.get_temp(eventtime)
-            if heater.name == 'heater_bed':
-                self.updateTextVariable("main.bedtemp.txt",
-                                '%.0f / %.0f' % (current_temp, target_temp))
-            else:
-                self.updateTextVariable("main.nozzletemp.txt",
-                                '%.0f / %.0f' % (current_temp, target_temp))
+        # for heater in self.heaters:
+        #     current_temp, target_temp = heater.get_temp(eventtime)
+        #     if heater.name == 'heater_bed':
+        #         self.updateTextVariable("main.bedtemp.txt",
+        #                         '%.0f / %.0f' % (current_temp, target_temp))
+        #     else:
+        #         self.updateTextVariable("main.nozzletemp.txt",
+        #                         '%.0f / %.0f' % (current_temp, target_temp))
 
-        if self._is_led_on(eventtime):
-            self.send_text("status_led2=1")
-        else:
-            self.send_text("status_led2=0")
+        # if self._is_led_on(eventtime):
+        #     self.send_text("status_led2=1")
+        # else:
+        #     self.send_text("status_led2=0")
 
-        g_status = self.printer.lookup_object("gcode_move").get_status()
+        # g_status = self.printer.lookup_object("gcode_move").get_status()
 
-        self.updateNumericVariable("printpause.zvalue.vvs1", "2")
-        self.send_text(
-            "printpause.zvalue.val=%.0f" % (g_status['position'].z * 100))
+        # self.updateNumericVariable("printpause.zvalue.vvs1", "2")
+        # self.send_text(
+        #     "printpause.zvalue.val=%.0f" % (g_status['position'].z * 100))
 
-        fan = self.printer.lookup_object("fan")
-        self.updateTextVariable("printpause.fanspeed.txt",
-                    "%.0f%%" % (fan.get_status(eventtime)['speed'] * 100))
+        # fan = self.printer.lookup_object("fan")
+        # self.updateTextVariable("printpause.fanspeed.txt",
+        #             "%.0f%%" % (fan.get_status(eventtime)['speed'] * 100))
 
-        last_state = self._print_state
-        self._print_state = stats['state']
+        # last_state = self._print_state
+        # self._print_state = stats['state']
 
-        if stats['state'] == 'printing' and last_state != stats['state']:
-            self.send_text("page printpause")
-        if stats['state'] == 'complete' and last_state != stats['state']:
-            self.send_text("page main")
+        # if stats['state'] == 'printing' and last_state != stats['state']:
+        #     self.send_text("page printpause")
+        # if stats['state'] == 'complete' and last_state != stats['state']:
+        #     self.send_text("page main")
 
         return eventtime + self._update_interval
 
