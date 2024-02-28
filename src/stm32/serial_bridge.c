@@ -30,7 +30,7 @@ typedef struct serial_bridge_config {
 
 
 #if CONFIG_ENABLE_SERIAL_BRIDGE_USART1
-DECL_CONSTANT("SERIAL_BRIDGE_CONFIG_USART1_PA3,PA2", 0);
+DECL_CONSTANT("SERIAL_BRIDGE_CONFIG_USART1_PA10,PA9", 0);
 DECL_CONSTANT("SERIAL_BRIDGE_CONFIG_USART1_PB7,PB6", 1);
 #endif
 #if CONFIG_ENABLE_SERIAL_BRIDGE_USART2
@@ -58,8 +58,8 @@ serial_bridge_config_t configs[] = {
     {
         0,
         USART1,
-        GPIO('A', 3),
-        GPIO('A', 2),
+        GPIO('A', 10),
+        GPIO('A', 9),
         7,
         7
     },
