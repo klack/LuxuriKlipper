@@ -131,19 +131,16 @@ serial_bridge_get_active_config_for_usart(USART_TypeDef* usart){
 }
 
 void serial_bridge_handle_uart_irq(serial_bridge_config_t* config){
-    uint32_t sr = config->usart->SR;
-    if (sr & (USART_SR_RXNE | USART_SR_ORE)) {
-        // The ORE flag is automatically cleared by reading SR, followed
-        // by reading DR.
-        serial_bridge_rx_byte(config->usart->DR, config->usart_index);
-    }
-    if (sr & USART_SR_TXE && config->usart->CR1 & USART_CR1_TXEIE) {
+    uint32_t isr = config->usart->ISR;
+    if (isr & (USART_ISR_RXNE_RXFNE | USART_ISR_ORE))
+        serial_bridge_rx_byte(config->usart->RDR, config->usart_index);
+    if (isr & USART_ISR_TXE_TXFNF && config->usart->CR1 & USART_CR1_TXEIE) {
         uint8_t data;
         int ret = serial_bridge_get_tx_byte(&data, config->usart_index);
         if (ret)
             config->usart->CR1 = CR1_FLAGS;
         else
-            config->usart->DR = data;
+            config->usart->TDR = data;
     }
 }
 
@@ -200,8 +197,8 @@ serial_bridge_configure(uint8_t* config, uint32_t* baud)
 
     uint32_t pclk = get_pclock_frequency((uint32_t)s_config->usart);
     uint32_t div = DIV_ROUND_CLOSEST(pclk, *baud);
-    s_config->usart->BRR = (((div / 16) << USART_BRR_DIV_Mantissa_Pos)
-                   | ((div % 16) << USART_BRR_DIV_Fraction_Pos));
+    s_config->usart->BRR = (((div / 16) << USART_BRR_DIV_MANTISSA_Pos)
+                   | ((div % 16) << USART_BRR_DIV_FRACTION_Pos));
     s_config->usart->CR1 = CR1_FLAGS;
 
     gpio_peripheral(s_config->rx_pin,
