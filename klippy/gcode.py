@@ -46,7 +46,7 @@ class GCodeCommand:
             return False
         ok_msg = "ok"
         if msg:
-            ok_msg = "ok %s" % (msg,)
+            ok_msg = "ok \n\r%s" % (msg,)
         self.respond_raw(ok_msg)
         self._need_ack = False
         return True
@@ -224,9 +224,9 @@ class GCodeDispatch:
             gcmd.ack()
     def run_script_from_command(self, script):
         self._process_commands(script.split('\n'), need_ack=False)
-    def run_script(self, script):
+    def run_script(self, script, need_ack=False):
         with self.mutex:
-            self._process_commands(script.split('\n'), need_ack=False)
+            self._process_commands(script.split('\n'), need_ack)
     def get_mutex(self):
         return self.mutex
     def create_gcode_command(self, command, commandline, params):
