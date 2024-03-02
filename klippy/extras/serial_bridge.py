@@ -96,7 +96,7 @@ class PrinterSerialBridge:
         self.callbacks = []
         self.printer = config.get_printer()
         self.name = config.get_name().split()[-1]
-        self.eol = '\n\r'
+        self.eol = '\r'
         self._ready = False
         self.baud = config.getint("baud", 115200)
         self.serial_config = config.getint("config", 4)

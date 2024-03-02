@@ -46,7 +46,7 @@ class GCodeCommand:
             return False
         ok_msg = "ok"
         if msg:
-            ok_msg = "ok \n\r%s" % (msg,)
+            ok_msg = "ok \n%s" % (msg,)
         self.respond_raw(ok_msg)
         self._need_ack = False
         return True

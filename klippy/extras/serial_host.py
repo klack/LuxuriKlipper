@@ -35,12 +35,12 @@ class SerialHost:
         message = self._last_message if self._last_message else None
 
         for byte in data:
-            if byte != 0x0D: # Not a carriage return
+            if byte != 0x0A: # Not a line feed
                 if message is None:
                     message = Message()  # Start a new message if not already started
                     message.payload = []
                 message.payload.append(byte)  # Add current byte to the message payload
-            else: # Carriage return recieved
+            else: # Line feed recieved
                 if message is not None:  # If there's a message being constructed
                     completed_messages.append(message)  # Add the completed message to the list
                     message = None  # Reset the message to start a new one
